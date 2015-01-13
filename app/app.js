@@ -3,14 +3,13 @@
  */
 
 (function(){
-    var app = angular.module("greetingsJS", ["greetingTab","greetingForm"]);
+    var app = angular.module("weathercatJS", [/*"greetingTab","greetingForm"*/]);
 
-    app.controller("GreetingsController", ["$http",
+    app.controller("WeathercatController", ["$http",
         function($http) {
-            this.GREETINGS_API = "http://greetings-app.herokuapp.com/greetings";
-            this.newGreeting = {'date': Date.now()};
+            this.WEATHERCAT_REGIONS = "http://weathercat.herokuapp.com/regions";
             this.loading = false;
-            var greetingCtrl = this;
+            var weathercatCtrl = this;
 
             this.isLoading = function(){
                 return this.loading;
@@ -20,11 +19,11 @@
                 return this.greetings === undefined;
             }
 
-            this.listGreetings = function(){
+            this.listRegions = function(){
                 this.loading = true;
-                $http.get(this.GREETINGS_API)
+                $http.get(this.WEATHERCAT_REGIONS)
                     .success(function (data) {
-                        greetingCtrl.greetings = data;
+                        weathercatCtrl.regions = data;
                     });
             };
 
