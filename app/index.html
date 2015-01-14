@@ -15,48 +15,82 @@
     <script src="greeting-form/greeting-form.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">GreetingsJS</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
-    </nav>
-
-    <div class="container" ng-controller="WeathercatController as controller">
-        <header>
-            <h1 class="text-center">WeatherCatJS</h1>
-            <h3 class="text-center">The AngularJS client for WeatherCatApp</h3>
-            <h3>&nbsp;</h3>
-        </header>
-
-        <div class="text-center">
-            <button class="btn btn-lg btn-primary" ng-click="controller.listRegions()">
-                <span ng-show="!controller.isLoading()">Get Greetings</span>
-                <span ng-show="controller.isLoading()"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</span>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
             </button>
+            <a class="navbar-brand" href="#">GreetingsJS</a>
         </div>
-        <div ng-repeat="region in controller.regions">
-            <h3>{{region}}</h3>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
         </div>
-        <div>
-            <h3>Add new greeting</h3>
-            <greeting-form></greeting-form>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container" ng-controller="WeathercatController as controller" ng-init="controller.listRegions()">
+    <header>
+        <h1 class="text-center">WeatherCatJS</h1>
+
+        <h3 class="text-center">The AngularJS client for WeatherCatApp</h3>
+
+        <h3>&nbsp;</h3>
+    </header>
+    <section class="tab">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: controller.isSet(1)}">
+                <a href ng-click="controller.setTab(1)">Previsió comarques</a></li>
+            <li ng-class="{active: controller.isSet(2)}">
+                <a href ng-click="controller.setTab(2)">Alertes d'usuari</a></li>
+        </ul>
+        <div class="tab-content" ng-show="controller.isSet(1)">
+            <div ng-repeat="region in controller.regions">
+                <a ng-click="controller.getWeather(region)">{{region}}</a>
+            </div>
+
+            <div class="region-weather" ng-show="controller.isActiveWeather()">
+                <h2>Temps de la comarca: {{controller.regionWeatherName}}</h2>
+
+                <p> El temps es: {{controller.regionWeatherWeather}}</p>
+                <img src={{controller.regionWeatherImage}} width="420" height="420" />
+            </div>
         </div>
-    </div><!-- /.container -->
+        <div class="tab-content" ng-show="controller.isSet(2)">
+            <form novalidate>
+                <label>Username:</label>
+                <input type="text" ng-model="user.username"/>
+                <label>Email:</label>
+                <input type="text" ng-model="user.email"/>
+                <button ng-click="controller.retrieveUserAlerts(user)">Entra</button>
+            </form>
+            <div ng-show="controller.isRetrievedUser()">
+                <h1>Usuari:{{controller.error}}</h1>
+                <h2>Llista d'alertes</h2>
+                <ul>
+                <div ng-repeat="alert in controller.userAlerts">
+                    <li>Comarca:  Temps:  Estat:
+                        <!--<form method="POST" action="/users/${user.getUsername()}/${alert.getId()}">
+                            <input type="hidden" name="id" value=${alert.getId()}>
+                            <input type="submit" name="enable_disable" value="Activar/Desactivar">
+                            <input type="submit" name="delete" value="Eliminar">
+                        </form>--></li>
+                </div>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- /.container -->
 
 </body>
 </html>
