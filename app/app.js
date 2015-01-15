@@ -8,18 +8,12 @@
     app.controller("WeathercatController", ["$http",
         function ($http) {
             this.WEATHERCAT_REGIONS = "http://weathercat.herokuapp.com/regions";
-            this.loading = false;
+            this.USERS_URL = "http://weathercat.herokuapp.com/users";
             var weathercatCtrl = this;
             this.tab = 1;
             this.retrievedUser = false;
-
-            this.isLoading = function () {
-                return this.loading;
-            };
-
-            this.noGreetings = function () {
-                return this.greetings === undefined;
-            }
+            var user;
+            var alert;
 
             this.listRegions = function () {
                 this.loading = true;
@@ -45,15 +39,6 @@
                 return weathercatCtrl.activeWeather;
             };
 
-            this.addGreeting = function () {
-                $http.post(this.GREETINGS_API, this.newGreeting)
-                    .then(function () {
-                        greetingCtrl.newGreeting = {'date': Date.now()};
-                        greetingCtrl.listGreetings();
-                    });
-            };
-
-
             this.setTab = function (newValue) {
                 this.tab = newValue;
             };
@@ -62,29 +47,61 @@
                 return this.tab === tabName;
             }
 
-            this.retrieveUserAlerts = function (user) {
+            this.retrieveUserAlerts = function () {
                 weathercatCtrl.retrievedUser = true;
-                $http.post(this.USERS_URL, user)
+                $http.post(this.USERS_URL, user)/*
                     .success(function (user){
                         this.user = user;
                     })
                     .error(function (data, status, headers, config) {
                         this.error = status;
-                    });
-                this.userURL = this.USERS_URL + "/" + user.username;
+                    })*/;
+                this.retrieveUserInfo();
+
+            };
+
+            this.retrieveUserInfo = function(){
+                this.user.alerts = "holaa";
+                this.userURL = this.USERS_URL + "/" + this.user.username;
                 $http.get(this.userURL)
                     .success(function (user) {
-                        this.user = user;
-                        weathercatCtrl.userName = user("username");
-                        weathercatCtrl.userEmail = user("email");
-                        weathercatCtrl.userAlerts = user("alerts");
-                    }).error(function (data, status, headers, config) {
-                        this.error = status;
+                        /*weathercatCtrl.userName = user.username;
+                         weathercatCtrl.userEmail = user.email;*/
+                        this.user.alerts = user.alerts;
                     });
             };
 
             this.isRetrievedUser = function () {
                 return this.retrievedUser;
-            }
+            };
+
+            this.enable_disable_alert = function(){
+                userAlert = this.userURL + "?enable_disable=0";
+                this.user.enable_disable = "0";
+                $http.post(this.USERS_URL, user);
+                this.retrieveUserInfo();
+            };
+
+            this.deleteAlert = function(){
+                userAlert = this.userURL + "?delete=0";
+                this.user.delete = "0";
+                $http.post(this.USERS_URL, user);
+                this.retrieveUserInfo();
+            };
+
+            this.addAlert = function () {
+                userAlert = this.userURL + "?addAlert=add";
+                this.alert.addAlert = "add";
+                this.alert.email = this.user.email;
+                $http.post(userAlert, alert)/*
+                 .success(function (user){
+                 this.user = user;
+                 })
+                 .error(function (data, status, headers, config) {
+                 this.error = status;
+                 })*/;
+                this.retrieveUserInfo();
+
+            };
         }]);
 }());
