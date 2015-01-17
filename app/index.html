@@ -53,17 +53,35 @@
             <li ng-class="{active: controller.isSet(2)}">
                 <a href ng-click="controller.setTab(2)">Alertes d'usuari</a></li>
         </ul>
+
         <div class="tab-content" ng-show="controller.isSet(1)">
-            <div ng-repeat="region in controller.regions">
-                <a ng-click="controller.getWeather(region)">{{region}}</a>
-            </div>
+            <table>
+                <tr>
+                    <td>
+                        <div ng-repeat="region in controller.regions">
+                            <a ng-click="controller.getWeather(region)">{{region}}</a>
 
-            <div class="region-weather" ng-show="controller.isActiveWeather()">
-                <h2>Temps de la comarca: {{controller.regionWeatherName}}</h2>
+                        </div>
 
-                <p> El temps es: {{controller.regionWeatherWeather}}</p>
-                <img src={{controller.regionWeatherImage}} width="420" height="420" />
-            </div>
+                    </td>
+                    <td>
+                        <div class="region-weather" ng-show="controller.isActiveWeather()">
+                            <h2>Temps de la comarca: {{controller.regionWeatherName}}</h2>
+
+                            <p> El temps es: {{controller.regionWeatherWeather}}</p>
+                            <img src={{controller.regionWeatherImage}} width="420" height="420" />
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+
+
+
         </div>
         <div class="tab-content" ng-show="controller.isSet(2)">
             <form novalidate>
