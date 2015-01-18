@@ -8,12 +8,8 @@
     app.controller("WeathercatController", ["$http",
         function ($http) {
             this.WEATHERCAT_REGIONS = "http://weathercat.herokuapp.com/regions";
-            this.USERS_URL = "http://weathercat.herokuapp.com/users";
             var weathercatCtrl = this;
             this.tab = 1;
-            this.retrievedUser = false;
-            var user;
-            var alert;
 
             this.listRegions = function () {
                 this.loading = true;
@@ -47,61 +43,12 @@
                 return this.tab === tabName;
             }
 
-            this.retrieveUserAlerts = function () {
-                weathercatCtrl.retrievedUser = true;
-                $http.post(this.USERS_URL, user)/*
-                    .success(function (user){
-                        this.user = user;
-                    })
-                    .error(function (data, status, headers, config) {
-                        this.error = status;
-                    })*/;
-                this.retrieveUserInfo();
-
-            };
-
-            this.retrieveUserInfo = function(){
-                this.user.alerts = "holaa";
-                this.userURL = this.USERS_URL + "/" + this.user.username;
+            this.retrieveUser = function(){
+                this.userURL = this.USERS_URL + "/" + this.username;
                 $http.get(this.userURL)
                     .success(function (user) {
-                        /*weathercatCtrl.userName = user.username;
-                         weathercatCtrl.userEmail = user.email;*/
-                        this.user.alerts = user.alerts;
+                        weathercatCtrl.user = user;
                     });
-            };
-
-            this.isRetrievedUser = function () {
-                return this.retrievedUser;
-            };
-
-            this.enable_disable_alert = function(){
-                userAlert = this.userURL + "?enable_disable=0";
-                this.user.enable_disable = "0";
-                $http.post(this.USERS_URL, user);
-                this.retrieveUserInfo();
-            };
-
-            this.deleteAlert = function(){
-                userAlert = this.userURL + "?delete=0";
-                this.user.delete = "0";
-                $http.post(this.USERS_URL, user);
-                this.retrieveUserInfo();
-            };
-
-            this.addAlert = function () {
-                userAlert = this.userURL + "?addAlert=add";
-                this.alert.addAlert = "add";
-                this.alert.email = this.user.email;
-                $http.post(userAlert, alert)/*
-                 .success(function (user){
-                 this.user = user;
-                 })
-                 .error(function (data, status, headers, config) {
-                 this.error = status;
-                 })*/;
-                this.retrieveUserInfo();
-
             };
         }]);
 }());
