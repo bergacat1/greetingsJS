@@ -43,12 +43,5 @@
                 return this.tab === tabName;
             }
 
-            this.retrieveUser = function(){
-                this.userURL = this.USERS_URL + "/" + this.username;
-                $http.get(this.userURL)
-                    .success(function (user) {
-                        weathercatCtrl.user = user;
-                    });
-            };
         }]);
 }());
